@@ -68,4 +68,4 @@ def generate_text(size: int, seed="The ", k=1):
     return "".join(output_char)
 
 
-print(generate_text(100))
+print(generate_text(100, 2000, seed="The", k=2))
