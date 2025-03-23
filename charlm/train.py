@@ -14,8 +14,6 @@ def generate_batches(encoded_text: NDArray[any], sample_per_batch=10, seq_len=50
     encoded_text = encoded_text[:char_per_batch * avail_batch]
     encoded_text = encoded_text.reshape((sample_per_batch, -1))
 
-    print(encoded_text)
-
     for n in range(0, encoded_text.shape[1], seq_len):
         x = encoded_text[:, n : n + seq_len]
         y = np.zeros_like(x)
