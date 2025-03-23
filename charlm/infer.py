@@ -17,7 +17,7 @@ model = LSTM(
     all_char,
     num_hidden=1024,
     num_layers=4,
-    drop_prob=0.4,
+    drop_prob=0.6,
 ).to(device)
 
 model.load_state_dict(
