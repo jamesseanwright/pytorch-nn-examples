@@ -3,23 +3,18 @@ from numpy.typing import NDArray
 import torch
 from torch import nn
 from model import LSTM
+from onehot import one_hot_encoder
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-def one_hot_encoder(encoded_text: NDArray[any], n_unique_char: int):
-    one_hot = np.zeros((encoded_text.size, n_unique_char)).astype(np.float32)
-    one_hot[np.arange(one_hot.shape[0]), encoded_text.flatten()] = 1.0
-    one_hot = one_hot.reshape((*encoded_text.shape, n_unique_char))
-
-    return one_hot
 
 
 def generate_batches(encoded_text: NDArray[any], sample_per_batch=10, seq_len=50):
     char_per_batch = sample_per_batch * seq_len
     avail_batch = int(len(encoded_text) / char_per_batch)
-    encoded_text = encoded_text[: char_per_batch * avail_batch]
+    encoded_text = encoded_text[:char_per_batch * avail_batch]
     encoded_text = encoded_text.reshape((sample_per_batch, -1))
+
+    print(encoded_text)
 
     for n in range(0, encoded_text.shape[1], seq_len):
         x = encoded_text[:, n : n + seq_len]
@@ -35,7 +30,7 @@ def generate_batches(encoded_text: NDArray[any], sample_per_batch=10, seq_len=50
         yield x, y
 
 
-with open("char-lm/shakespeare.txt") as f:
+with open("charlm/shakespeare.txt") as f:
     text = f.read()
 
 model = LSTM(
@@ -97,4 +92,4 @@ for epoch in range(num_epoch):
             print(f"epoch: {epoch + 1}, i: {i}, loss: {loss.item()}")
             model.train()
 
-torch.save(model.state_dict(), "char-lm/weights.pth")
+torch.save(model.state_dict(), "charlm/weights.pth")
