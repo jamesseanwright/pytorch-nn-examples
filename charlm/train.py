@@ -58,8 +58,9 @@ model.train()
 for epoch in range(num_epoch):
     hidden = model.init_hidden(batch_size)
 
-    iter = generate_batches(val_data, batch_size, seq_len)
-    print(iter)
+    batches = list(generate_batches(val_data, batch_size, seq_len))
+
+    print("batches n:", len(batches))
 
     for x, y in iter:
         i += 1
