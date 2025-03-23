@@ -27,6 +27,7 @@ model.load_state_dict(
     ),
 )
 
+
 def predict_next_char(char: str, hidden=None, k=2):
     encoded_text = one_hot_encoder(
         np.array([[model.encoder[char]]]),
@@ -48,6 +49,7 @@ def predict_next_char(char: str, hidden=None, k=2):
 
     return model.decoder[char], hidden
 
+
 def generate_text(size: int, seed="The ", k=2):
     model.eval()
 
@@ -64,5 +66,6 @@ def generate_text(size: int, seed="The ", k=2):
         output_char.append(char)
 
     return "".join(output_char)
+
 
 print(generate_text(100, seed="When forty winters shall besiege ", k=8))

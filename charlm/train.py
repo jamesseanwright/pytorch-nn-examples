@@ -11,7 +11,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def generate_batches(encoded_text: NDArray[any], sample_per_batch=10, seq_len=50):
     char_per_batch = sample_per_batch * seq_len
     avail_batch = int(len(encoded_text) / char_per_batch)
-    encoded_text = encoded_text[:char_per_batch * avail_batch]
+    encoded_text = encoded_text[: char_per_batch * avail_batch]
     encoded_text = encoded_text.reshape((sample_per_batch, -1))
 
     for n in range(0, encoded_text.shape[1], seq_len):
@@ -43,7 +43,7 @@ encoded_text = model.encode_text(text)
 optimiser = torch.optim.Adam(model.parameters(), lr=0.001)
 criterion = nn.CrossEntropyLoss()
 train_percent = 0.9
-train_ind = int(len(encoded_text) * train_percent)
+train_ind = int(len(encoded_text) * (train_percent))
 train_data = encoded_text[:train_ind]
 val_data = encoded_text[train_ind:]
 num_epoch = 20
@@ -58,7 +58,10 @@ model.train()
 for epoch in range(num_epoch):
     hidden = model.init_hidden(batch_size)
 
-    for x, y in generate_batches(val_data, batch_size, seq_len):
+    iter = generate_batches(val_data, batch_size, seq_len)
+    print(iter)
+
+    for x, y in iter:
         i += 1
         model.zero_grad()
         x = one_hot_encoder(x, num_char)
