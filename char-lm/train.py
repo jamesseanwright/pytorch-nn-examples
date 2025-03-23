@@ -97,4 +97,4 @@ for epoch in range(num_epoch):
             print(f"epoch: {epoch + 1}, i: {i}, loss: {loss.item()}")
             model.train()
 
-torch.save(model.state_dict(), "weights.pth")
+torch.save(model.state_dict(), "char-lm/weights.pth")
