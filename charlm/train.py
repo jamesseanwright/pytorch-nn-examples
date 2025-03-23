@@ -45,7 +45,7 @@ criterion = nn.CrossEntropyLoss()
 train_percent = 0.9
 train_ind = int(len(encoded_text) * (train_percent))
 train_data = encoded_text[:train_ind]
-val_data = encoded_text[train_ind:]
+eval_data = encoded_text[train_ind:]
 num_epoch = 20
 batch_size = 100
 seq_len = 100
@@ -58,11 +58,7 @@ model.train()
 for epoch in range(num_epoch):
     hidden = model.init_hidden(batch_size)
 
-    batches = list(generate_batches(val_data, batch_size, seq_len))
-
-    print("batches n:", len(batches))
-
-    for x, y in batches:
+    for x, y in generate_batches(train_data, batch_size, seq_len):
         i += 1
         model.zero_grad()
         x = one_hot_encoder(x, num_char)
@@ -82,7 +78,7 @@ for epoch in range(num_epoch):
             val_hidden = model.init_hidden(batch_size)
             val_losses = []
 
-            for x, y in generate_batches(train_data, batch_size, seq_len):
+            for x, y in generate_batches(eval_data, batch_size, seq_len):
                 x = one_hot_encoder(x, num_char)
                 inputs = torch.tensor(x).to(device)
                 targets = torch.LongTensor(y).to(device)
