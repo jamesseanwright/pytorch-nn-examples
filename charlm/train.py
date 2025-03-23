@@ -62,7 +62,7 @@ for epoch in range(num_epoch):
 
     print("batches n:", len(batches))
 
-    for x, y in iter:
+    for x, y in batches:
         i += 1
         model.zero_grad()
         x = one_hot_encoder(x, num_char)
