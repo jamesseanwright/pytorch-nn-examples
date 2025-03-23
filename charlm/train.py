@@ -46,11 +46,11 @@ train_percent = 0.9
 train_ind = int(len(encoded_text) * train_percent)
 train_data = encoded_text[:train_ind]
 val_data = encoded_text[train_ind:]
-num_epoch = 50
+num_epoch = 20
 batch_size = 100
 seq_len = 100
 i = 0
-validation_step_threshold = 25
+validation_step_threshold = 50
 num_char = max(encoded_text) + 1
 
 model.train()
