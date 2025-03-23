@@ -46,7 +46,7 @@ train_percent = 0.9
 train_ind = int(len(encoded_text) * train_percent)
 train_data = encoded_text[:train_ind]
 val_data = encoded_text[train_ind:]
-num_epoch = 20
+num_epoch = 50
 batch_size = 100
 seq_len = 100
 i = 0
@@ -81,10 +81,10 @@ for epoch in range(num_epoch):
             for x, y in generate_batches(train_data, batch_size, seq_len):
                 x = one_hot_encoder(x, num_char)
                 inputs = torch.tensor(x).to(device)
-                targets = torch.tensor(y).long().to(device)
+                targets = torch.LongTensor(y).to(device)
                 val_hidden = tuple([state.data for state in val_hidden])
                 lstm_out, val_hidden = model.forward(inputs, val_hidden)
-                loss = criterion(lstm_out, targets.view(batch_size * seq_len))
+                loss = criterion(lstm_out, targets.view(batch_size * seq_len).long())
                 val_losses.append(loss.item())
 
             print(f"epoch: {epoch + 1}, i: {i}, loss: {loss.item()}")
